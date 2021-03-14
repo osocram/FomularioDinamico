@@ -3,7 +3,8 @@ program Project1;
 uses
   Vcl.Forms,
   UPrincipal in 'UPrincipal.pas' {Form1},
-  uGenerateObjects in 'uGenerateObjects.pas';
+  uGenerateObjects in 'uGenerateObjects.pas',
+  UForm2 in 'UForm2.pas' {Form2};
 
 {$R *.res}
 
