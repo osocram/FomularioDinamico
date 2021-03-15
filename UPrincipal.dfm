@@ -18,23 +18,33 @@ object Form1: TForm1
   object memoPrincipal: TMemo
     Left = 8
     Top = 8
-    Width = 529
+    Width = 409
     Height = 177
     TabOrder = 0
   end
   object bCriarForm: TButton
-    Left = 551
-    Top = 72
-    Width = 113
+    Left = 463
+    Top = 32
+    Width = 178
     Height = 49
     Caption = 'Criar Form'
     TabOrder = 1
     OnClick = bCriarFormClick
   end
+  object Button1: TButton
+    Left = 463
+    Top = 104
+    Width = 178
+    Height = 49
+    Caption = 'Adicionar tela de cadastro'
+    TabOrder = 2
+    OnClick = Button1Click
+  end
   object cdsObjetos: TClientDataSet
     Aggregates = <>
     Params = <>
-    Left = 40
-    Top = 32
+    AfterPost = cdsObjetosAfterPost
+    Left = 80
+    Top = 88
   end
 end
