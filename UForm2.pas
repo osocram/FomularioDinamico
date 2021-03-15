@@ -14,7 +14,6 @@ type
     { Private declarations }
   public
     { Public declarations }
-    eu:string;
   end;
 
 var

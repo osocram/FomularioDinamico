@@ -4,17 +4,24 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Data.DB, Datasnap.DBClient, uForm2;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Data.DB, Datasnap.DBClient, uForm2,
+  Vcl.ExtCtrls, Vcl.DBCtrls, UCadastro;
+
 
 type
   TForm1 = class(TForm)
     memoPrincipal: TMemo;
     cdsObjetos: TClientDataSet;
     bCriarForm: TButton;
+    Button1: TButton;
     procedure bCriarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure bCriarFormClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure cdsObjetosAfterPost(DataSet: TDataSet);
   private
+    dir_base: String;
+    arquivo : String;
     procedure generateEdit(aCds: TClientDataSet; aForm: TForm);
     procedure generateLabel(aCds: TClientDataSet; aForm: TForm);
     procedure generatePageControl(aCds: TClientDataSet; aForm: TForm);
@@ -27,7 +34,6 @@ type
 
 var
   Form1: TForm1;
-  Form2: TForm2;
 
 implementation
 
@@ -35,7 +41,7 @@ implementation
 
 procedure TForm1.bCriarFormClick(Sender: TObject);
 begin
-   Try
+  Try
     Form2 := Tform2.create(nil);
 
     cdsObjetos.First;
@@ -78,6 +84,17 @@ begin
       memoPrincipal.Lines.Add('Exception ' + E.Message);
     end;
   end;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+  FCadastro := TFCadastro.create(nil);
+  Try
+    FCadastro.Showmodal;
+  Finally
+    FCadastro.release;
+	  FCadastro := nil;
+  End;
 end;
 
 procedure TForm1.generatePageControl(aCds: TClientDataSet; aForm: TForm);
@@ -139,6 +156,11 @@ begin
   meuLbl.Height   := acds.FieldByName('height').AsInteger;
 end;
 
+procedure TForm1.cdsObjetosAfterPost(DataSet: TDataSet);
+begin
+  cdsObjetos.SaveToFile(dir_base + arquivo, dfBinary);
+end;
+
 procedure TForm1.criarObjeto(aClasse: String);
 begin
   aClasse := AnsiUpperCase(aClasse);
@@ -170,7 +192,8 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 begin
 
-  SetParentComponent(Owner);
+  dir_base := ExtractFilePath(ParamStr(0));
+  arquivo  := 'Objetos.dat';
 
   //Fields
   cdsObjetos.FieldDefs.Add('id_order',ftInteger);
@@ -182,75 +205,82 @@ begin
   cdsObjetos.FieldDefs.Add('left',ftInteger);
   cdsObjetos.FieldDefs.Add('width',ftInteger);
   cdsObjetos.FieldDefs.Add('height',ftInteger);
-  cdsObjetos.CreateDataSet;
 
-  //TPageControl
-  cdsObjetos.Insert;
-  cdsObjetos.FieldByName('id_order').AsInteger := 1;
-  cdsObjetos.FieldByName('ds_nome').AsString := 'pg';
-  cdsObjetos.FieldByName('ds_caption').AsString := 'AbaExemplo';
-  cdsObjetos.FieldByName('ds_class').AsString := 'TPageControl';
-  cdsObjetos.FieldByName('ds_parent').AsString := 'Panel1';
-  cdsObjetos.FieldByName('top').AsInteger := 216;
-  cdsObjetos.FieldByName('left').AsInteger := 144;
-  cdsObjetos.FieldByName('width').AsInteger := 289;
-  cdsObjetos.FieldByName('height').AsInteger := 193;
-  cdsObjetos.Post;
+  if FileExists(dir_base + arquivo) then
+    cdsObjetos.LoadFromFile(dir_base + arquivo)
+  else
+  begin
+    cdsObjetos.CreateDataSet;
 
-  //TTabSheet
-  cdsObjetos.Insert;
-  cdsObjetos.FieldByName('id_order').AsInteger := 2;
-  cdsObjetos.FieldByName('ds_nome').AsString := 'tsAux';
-  cdsObjetos.FieldByName('ds_caption').AsString := 'PCExemplo';
-  cdsObjetos.FieldByName('ds_class').AsString := 'TTabSheet';
-  cdsObjetos.FieldByName('ds_parent').AsString := 'pg';
-  cdsObjetos.FieldByName('top').AsInteger := 216;
-  cdsObjetos.FieldByName('left').AsInteger := 144;
-  cdsObjetos.FieldByName('width').AsInteger := 289;
-  cdsObjetos.FieldByName('height').AsInteger := 193;
-  cdsObjetos.Post;
+    //TPageControl
+    cdsObjetos.Insert;
+    cdsObjetos.FieldByName('id_order').AsInteger := 1;
+    cdsObjetos.FieldByName('ds_nome').AsString := 'pg';
+    cdsObjetos.FieldByName('ds_caption').AsString := 'AbaExemplo';
+    cdsObjetos.FieldByName('ds_class').AsString := 'TPageControl';
+    cdsObjetos.FieldByName('ds_parent').AsString := 'Panel1';
+    cdsObjetos.FieldByName('top').AsInteger := 216;
+    cdsObjetos.FieldByName('left').AsInteger := 144;
+    cdsObjetos.FieldByName('width').AsInteger := 289;
+    cdsObjetos.FieldByName('height').AsInteger := 193;
+    cdsObjetos.Post;
 
-  //TEdit
-  cdsObjetos.Insert;
-  cdsObjetos.FieldByName('id_order').AsInteger := 3;
-  cdsObjetos.FieldByName('ds_nome').AsString := 'edtAux';
-  cdsObjetos.FieldByName('ds_caption').AsString := 'EdtExemplo';
-  cdsObjetos.FieldByName('ds_class').AsString := 'TEdit';
-  cdsObjetos.FieldByName('ds_parent').AsString := 'tsAux';
-  cdsObjetos.FieldByName('top').AsInteger := 10;
-  cdsObjetos.FieldByName('left').AsInteger := 10;
-  cdsObjetos.FieldByName('width').AsInteger := 60;
-  cdsObjetos.FieldByName('height').AsInteger := 20;
-  cdsObjetos.Post;
+    //TTabSheet
+    cdsObjetos.Insert;
+    cdsObjetos.FieldByName('id_order').AsInteger := 2;
+    cdsObjetos.FieldByName('ds_nome').AsString := 'tsAux';
+    cdsObjetos.FieldByName('ds_caption').AsString := 'PCExemplo';
+    cdsObjetos.FieldByName('ds_class').AsString := 'TTabSheet';
+    cdsObjetos.FieldByName('ds_parent').AsString := 'pg';
+    cdsObjetos.FieldByName('top').AsInteger := 216;
+    cdsObjetos.FieldByName('left').AsInteger := 144;
+    cdsObjetos.FieldByName('width').AsInteger := 289;
+    cdsObjetos.FieldByName('height').AsInteger := 193;
+    cdsObjetos.Post;
 
-  //TLabel
-  cdsObjetos.Insert;
-  cdsObjetos.FieldByName('id_order').AsInteger := 4;
-  cdsObjetos.FieldByName('ds_nome').AsString := 'lblAux';
-  cdsObjetos.FieldByName('ds_caption').AsString := 'LblExemplo';
-  cdsObjetos.FieldByName('ds_class').AsString := 'TLabel';
-  cdsObjetos.FieldByName('ds_parent').AsString := 'tsAux';
-  cdsObjetos.FieldByName('top').AsInteger := 10;
-  cdsObjetos.FieldByName('left').AsInteger := 100;
-  cdsObjetos.FieldByName('width').AsInteger := 31;
-  cdsObjetos.FieldByName('height').AsInteger := 13;
-  cdsObjetos.Post;
+    //TEdit
+    cdsObjetos.Insert;
+    cdsObjetos.FieldByName('id_order').AsInteger := 3;
+    cdsObjetos.FieldByName('ds_nome').AsString := 'edtAux';
+    cdsObjetos.FieldByName('ds_caption').AsString := 'EdtExemplo';
+    cdsObjetos.FieldByName('ds_class').AsString := 'TEdit';
+    cdsObjetos.FieldByName('ds_parent').AsString := 'tsAux';
+    cdsObjetos.FieldByName('top').AsInteger := 10;
+    cdsObjetos.FieldByName('left').AsInteger := 10;
+    cdsObjetos.FieldByName('width').AsInteger := 60;
+    cdsObjetos.FieldByName('height').AsInteger := 20;
+    cdsObjetos.Post;
 
-  //TGroupBox
- { cdsObjetos.Insert;
-  cdsObjetos.FieldByName('id_order').AsInteger := 5;
-  cdsObjetos.FieldByName('ds_nome').AsString := 'gBox';
-  cdsObjetos.FieldByName('align').AsString := 'alTop';
-  cdsObjetos.Post;
+    //TLabel
+    cdsObjetos.Insert;
+    cdsObjetos.FieldByName('id_order').AsInteger := 4;
+    cdsObjetos.FieldByName('ds_nome').AsString := 'lblAux';
+    cdsObjetos.FieldByName('ds_caption').AsString := 'LblExemplo';
+    cdsObjetos.FieldByName('ds_class').AsString := 'TLabel';
+    cdsObjetos.FieldByName('ds_parent').AsString := 'tsAux';
+    cdsObjetos.FieldByName('top').AsInteger := 10;
+    cdsObjetos.FieldByName('left').AsInteger := 100;
+    cdsObjetos.FieldByName('width').AsInteger := 31;
+    cdsObjetos.FieldByName('height').AsInteger := 13;
+    cdsObjetos.Post;
 
-  //TPanel
-  cdsObjetos.Insert;
-  cdsObjetos.FieldByName('id_order').AsInteger := 6;
-  cdsObjetos.FieldByName('ds_nome').AsString := 'Panel';
-  cdsObjetos.FieldByName('align').AsString := 'alClient';
-  cdsObjetos.Post;}
+    //TGroupBox
+    cdsObjetos.Insert;
+    cdsObjetos.FieldByName('id_order').AsInteger := 5;
+    cdsObjetos.FieldByName('ds_nome').AsString := 'gBox';
+    //cdsObjetos.FieldByName('align').AsString := 'alTop';
+    cdsObjetos.Post;
+
+    //TPanel
+    cdsObjetos.Insert;
+    cdsObjetos.FieldByName('id_order').AsInteger := 6;
+    cdsObjetos.FieldByName('ds_nome').AsString := 'Panel';
+    //cdsObjetos.FieldByName('align').AsString := 'alClient';
+    cdsObjetos.Post;
+  end;
 
   cdsObjetos.IndexFieldNames := 'id_order';
+
 end;
 
 end.

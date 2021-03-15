@@ -4,7 +4,8 @@ uses
   Vcl.Forms,
   UPrincipal in 'UPrincipal.pas' {Form1},
   uGenerateObjects in 'uGenerateObjects.pas',
-  UForm2 in 'UForm2.pas' {Form2};
+  UForm2 in 'UForm2.pas' {Form2},
+  UCadastro in 'UCadastro.pas' {FCadastro};
 
 {$R *.res}
 
