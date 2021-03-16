@@ -44,7 +44,13 @@ object Form1: TForm1
     Aggregates = <>
     Params = <>
     AfterPost = cdsObjetosAfterPost
-    Left = 80
-    Top = 88
+    Left = 336
+    Top = 72
+    object cdsObjetosag_max: TAggregateField
+      FieldName = 'ag_max'
+      Active = True
+      DisplayName = ''
+      Expression = 'max(id_order)'
+    end
   end
 end

@@ -14,6 +14,7 @@ type
     cdsObjetos: TClientDataSet;
     bCriarForm: TButton;
     Button1: TButton;
+    cdsObjetosag_max: TAggregateField;
     procedure bCriarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure bCriarFormClick(Sender: TObject);
@@ -195,6 +196,13 @@ begin
   dir_base := ExtractFilePath(ParamStr(0));
   arquivo  := 'Objetos.dat';
 
+   {object cdsObjetosag_max: TAggregateField
+    FieldName = 'ag_max'
+    Active = True
+    DisplayName = ''
+    Expression = 'max(id_order)'
+    end}
+
   //Fields
   cdsObjetos.FieldDefs.Add('id_order',ftInteger);
   cdsObjetos.FieldDefs.Add('ds_nome',ftString,60);
@@ -205,6 +213,9 @@ begin
   cdsObjetos.FieldDefs.Add('left',ftInteger);
   cdsObjetos.FieldDefs.Add('width',ftInteger);
   cdsObjetos.FieldDefs.Add('height',ftInteger);
+  cdsObjetos.FieldDefs.Add('data_source',ftString,60);
+  cdsObjetos.FieldDefs.Add('data_sourceParent',ftString,60);
+  cdsObjetos.FieldDefs.Add('data_field',ftString,60);
 
   if FileExists(dir_base + arquivo) then
     cdsObjetos.LoadFromFile(dir_base + arquivo)
@@ -280,9 +291,6 @@ begin
   end;
 
   cdsObjetos.IndexFieldNames := 'id_order';
-
-  //Comentário Teste GIT! #paitáon
-
 end;
 
 end.
