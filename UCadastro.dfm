@@ -32,10 +32,10 @@ object FCadastro: TFCadastro
   object lblDscaption: TLabel
     Left = 32
     Top = 397
-    Width = 80
+    Width = 37
     Height = 13
     Hint = 'Esse nome ficar'#225' acima do campo'
-    Caption = 'Nome Formul'#225'rio'
+    Caption = 'Caption'
   end
   object lblDataField: TLabel
     Left = 32
@@ -125,7 +125,7 @@ object FCadastro: TFCadastro
       Left = 20
       Top = 195
       Width = 37
-      Height = 14
+      Height = 13
       Caption = 'Largura'
     end
     object lblHeight: TLabel
@@ -167,6 +167,14 @@ object FCadastro: TFCadastro
       DataSource = dsCadastro
       TabOrder = 3
     end
+  end
+  object DBComboBox1: TDBComboBox
+    Left = 312
+    Top = 349
+    Width = 145
+    Height = 21
+    DataSource = dsCadastro
+    TabOrder = 7
   end
   object dsCadastro: TDataSource
     DataSet = Form1.cdsObjetos

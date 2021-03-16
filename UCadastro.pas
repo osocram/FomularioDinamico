@@ -30,12 +30,14 @@ type
     lblWidth: TLabel;
     lblHeight: TLabel;
     dbedtHeight: TDBEdit;
+    DBComboBox1: TDBComboBox;
     procedure FormCreate(Sender: TObject);
     procedure DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
   private
     max_id: integer;
     procedure carregaListaClasseCB;
     procedure carregaDataField;
+    procedure BuscarPaiCadastrado(aCds: TClientDataSet;aItems: TSTrings);
     { Private declarations }
   public
     { Public declarations }
@@ -56,6 +58,7 @@ begin
   begin
     Form1.cdsObjetos.FieldByName('id_order').AsInteger := max_id;
     max_id := Form1.cdsObjetos.FieldByName('id_order').AsInteger + 1;
+    BuscarPaiCadastrado(form1.cdsObjetos,DBComboBox1.Items);
   end;
 end;
 
@@ -66,6 +69,26 @@ begin
   dbcbDsClasse.Items.Add('TPageControl');
   dbcbDsClasse.Items.Add('TTabSheet');
   dbcbDsClasse.Items.Add('TLabel');
+end;
+
+procedure TFCadastro.BuscarPaiCadastrado(aCds: TClientDataSet;aItems: TSTrings);
+var cdsClone:TclientDataSet;
+begin
+  cdsClone := TClientDataSet.Create(nil);
+  try
+    cdsClone.CloneCursor(aCds,false);
+    aItems.Clear;
+    cdsclone.First;
+    while not cdsClone.Eof do
+    begin
+      if cdsClone.FieldByName('ds_nome').AsString <> '' then
+        aItems.Add(cdsClone.FieldByName('ds_nome').AsString);
+      cdsClone.Next;
+    end;
+
+  finally
+    FreeAndNil(cdsclone);
+  end;
 end;
 
 procedure TFCadastro.carregaDataField;
@@ -85,6 +108,7 @@ begin
   dbedtHeight.DataField := 'height';
   dbcbDsClasse.DataField := 'ds_class';
   dbedtDataField.DataField := 'data_field';
+  DBComboBox1.DataField := 'ds_parent';
 end;
 
 procedure TFCadastro.FormCreate(Sender: TObject);
@@ -94,6 +118,7 @@ begin
 
   carregaListaClasseCB;
   carregaDataField;
+BuscarPaiCadastrado(form1.cdsObjetos,DBComboBox1.Items);
 end;
 
 end.
