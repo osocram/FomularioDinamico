@@ -222,7 +222,7 @@ begin
   else
   begin
     cdsObjetos.CreateDataSet;
-
+    {
     //TPageControl
     cdsObjetos.Insert;
     cdsObjetos.FieldByName('id_order').AsInteger := 1;
@@ -287,7 +287,7 @@ begin
     cdsObjetos.FieldByName('id_order').AsInteger := 6;
     cdsObjetos.FieldByName('ds_nome').AsString := 'Panel';
     //cdsObjetos.FieldByName('align').AsString := 'alClient';
-    cdsObjetos.Post;
+    cdsObjetos.Post;}
   end;
 
   cdsObjetos.IndexFieldNames := 'id_order';
