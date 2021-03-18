@@ -13,14 +13,6 @@ type
     DBNavigator1: TDBNavigator;
     dsCadastro: TDataSource;
     DBGrid1: TDBGrid;
-    lblClasse: TLabel;
-    lblDsnome: TLabel;
-    dbedtDsnome: TDBEdit;
-    lblDscaption: TLabel;
-    dbedtDsCaption: TDBEdit;
-    dbcbDsClasse: TDBComboBox;
-    lblDataField: TLabel;
-    dbedtDataField: TDBEdit;
     gbPosicao: TGroupBox;
     lblTop: TLabel;
     dbedtTop: TDBEdit;
@@ -30,11 +22,23 @@ type
     lblWidth: TLabel;
     lblHeight: TLabel;
     dbedtHeight: TDBEdit;
-    DBComboBox1: TDBComboBox;
+    GroupBox1: TGroupBox;
+    lblClasse: TLabel;
+    dbcbDsClasse: TDBComboBox;
+    lblDsnome: TLabel;
+    dbedtDsnome: TDBEdit;
+    lblDscaption: TLabel;
+    dbedtDsCaption: TDBEdit;
+    lblDataField: TLabel;
+    dbedtNomeBd: TDBEdit;
+    lblPai: TLabel;
+    dbcbPai: TDBComboBox;
     procedure FormCreate(Sender: TObject);
     procedure DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+    procedure dbcbDsClasseChange(Sender: TObject);
   private
     max_id: integer;
+    procedure carregaCadastroRapido;
     procedure carregaListaClasseCB;
     procedure carregaDataField;
     procedure BuscarPaiCadastrado(aCds: TClientDataSet;aItems: TSTrings);
@@ -58,7 +62,72 @@ begin
   begin
     Form1.cdsObjetos.FieldByName('id_order').AsInteger := max_id;
     max_id := Form1.cdsObjetos.FieldByName('id_order').AsInteger + 1;
-    BuscarPaiCadastrado(form1.cdsObjetos,DBComboBox1.Items);
+    BuscarPaiCadastrado(form1.cdsObjetos,dbcbPai.Items);
+  end;
+end;
+
+{
+procedure TFCadastro.desabilitaCampos(aAtivo: Boolean);
+begin
+  dbedtDsnome.Enabled    := aAtivo;
+  dbedtDsCaption.Enabled := aAtivo;
+  dbedtTop.Enabled       := aAtivo;
+  dbedtLeft.Enabled      := aAtivo;
+  dbedtWidth.Enabled     := aAtivo;
+  dbedtHeight.Enabled    := aAtivo;
+  dbcbDsClasse.Enabled   := aAtivo;
+  dbedtNomeBd.Enabled    := aAtivo;
+  DBComboBox1.Enabled    := aAtivo;
+end;
+}
+
+procedure TFCadastro.carregaCadastroRapido;
+begin
+  case dbcbDsClasse.ItemIndex of
+
+    0 : begin //TEdit
+          dsCadastro.DataSet.FieldByName('top').AsInteger := 10;
+          dsCadastro.DataSet.FieldByName('left').AsInteger := 10;
+          dsCadastro.DataSet.FieldByName('width').AsInteger := 60;
+          dsCadastro.DataSet.FieldByName('height').AsInteger := 21;
+          dsCadastro.DataSet.FieldByName('ds_nome').AsString := 'dbedt';
+          dsCadastro.DataSet.FieldByName('data_field').AsString := 'ds_';
+          dbedtDsCaption.Clear;
+          dbedtDsCaption.Enabled := false;
+        end;
+
+    1 : begin //TPageControl
+          dsCadastro.DataSet.FieldByName('top').AsInteger := 20;
+          dsCadastro.DataSet.FieldByName('left').AsInteger := 20;
+          dsCadastro.DataSet.FieldByName('width').AsInteger := 100;
+          dsCadastro.DataSet.FieldByName('height').AsInteger := 50;
+          dsCadastro.DataSet.FieldByName('ds_nome').AsString := 'pg';
+          dsCadastro.DataSet.FieldByName('data_field').AsString := 'pg_';
+          dbedtDsCaption.Clear;
+          dbedtDsCaption.Enabled := false;
+        end;
+
+    2 : begin //TTabSheet
+          dsCadastro.DataSet.FieldByName('top').AsInteger := 30;
+          dsCadastro.DataSet.FieldByName('left').AsInteger := 30;
+          dsCadastro.DataSet.FieldByName('width').AsInteger := 80;
+          dsCadastro.DataSet.FieldByName('height').AsInteger := 40;
+          dsCadastro.DataSet.FieldByName('ds_nome').AsString := 'ts';
+          dsCadastro.DataSet.FieldByName('data_field').AsString := 'ts_';
+          dbedtDsCaption.Enabled := true;
+          dsCadastro.DataSet.FieldByName('ds_caption').AsString := 'Aba 1';
+        end;
+
+    3 : begin //TLabel
+          dsCadastro.DataSet.FieldByName('top').AsInteger := 15;
+          dsCadastro.DataSet.FieldByName('left').AsInteger := 10;
+          dsCadastro.DataSet.FieldByName('width').AsInteger := 30;
+          dsCadastro.DataSet.FieldByName('height').AsInteger := 26;
+          dsCadastro.DataSet.FieldByName('ds_nome').AsString := 'lbl';
+          dsCadastro.DataSet.FieldByName('data_field').AsString := 'lbl_';
+          dbedtDsCaption.Enabled := true;
+          dsCadastro.DataSet.FieldByName('ds_caption').AsString := 'Descrição';
+        end;
   end;
 end;
 
@@ -69,6 +138,11 @@ begin
   dbcbDsClasse.Items.Add('TPageControl');
   dbcbDsClasse.Items.Add('TTabSheet');
   dbcbDsClasse.Items.Add('TLabel');
+end;
+
+procedure TFCadastro.dbcbDsClasseChange(Sender: TObject);
+begin
+  carregaCadastroRapido;
 end;
 
 procedure TFCadastro.BuscarPaiCadastrado(aCds: TClientDataSet;aItems: TSTrings);
@@ -99,26 +173,30 @@ begin
   cdsObjetos.FieldDefs.Add('data_sourceParent',ftString,60);
   cdsObjetos.FieldDefs.Add('data_field',ftString,60);
 }
-
-  dbedtDsnome.DataField := 'ds_nome';
+  dbedtDsnome.DataField    := 'ds_nome';
   dbedtDsCaption.DataField := 'ds_caption';
-  dbedtTop.DataField := 'top';
-  dbedtLeft.DataField := 'left';
-  dbedtWidth.DataField := 'width';
-  dbedtHeight.DataField := 'height';
-  dbcbDsClasse.DataField := 'ds_class';
-  dbedtDataField.DataField := 'data_field';
-  DBComboBox1.DataField := 'ds_parent';
+  dbedtTop.DataField       := 'top';
+  dbedtLeft.DataField      := 'left';
+  dbedtWidth.DataField     := 'width';
+  dbedtHeight.DataField    := 'height';
+  dbcbDsClasse.DataField   := 'ds_class';
+  dbedtNomeBd.DataField    := 'data_field';
+  dbcbPai.DataField    := 'ds_parent';
 end;
 
 procedure TFCadastro.FormCreate(Sender: TObject);
 begin
-  Form1.cdsObjetos.Last;
-  max_id := Form1.cdsObjetos.FieldByName('id_order').AsInteger + 1;
+  if (not Form1.cdsObjetos.IsEmpty) then
+  begin
+    Form1.cdsObjetos.Last;
+    max_id := Form1.cdsObjetos.FieldByName('id_order').AsInteger + 1;
+  end
+  else
+    max_id := 1;
 
   carregaListaClasseCB;
   carregaDataField;
-BuscarPaiCadastrado(form1.cdsObjetos,DBComboBox1.Items);
+  BuscarPaiCadastrado(form1.cdsObjetos,dbcbPai.Items);
 end;
 
 end.

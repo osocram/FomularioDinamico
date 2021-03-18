@@ -21,8 +21,6 @@ object Form2: TForm2
     Align = alTop
     Caption = 'GroupBox1'
     TabOrder = 0
-    ExplicitLeft = 200
-    ExplicitWidth = 185
   end
   object Panel1: TPanel
     Left = 0
@@ -32,9 +30,15 @@ object Form2: TForm2
     Align = alClient
     Caption = 'Panel1'
     TabOrder = 1
-    ExplicitLeft = 240
-    ExplicitTop = 176
-    ExplicitWidth = 185
-    ExplicitHeight = 41
+  end
+  object cdsCadastroTela: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 464
+    Top = 33
+  end
+  object dsCadastroTela: TDataSource
+    Left = 568
+    Top = 33
   end
 end
