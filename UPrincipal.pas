@@ -15,16 +15,22 @@ type
     bCriarForm: TButton;
     Button1: TButton;
     cdsObjetosag_max: TAggregateField;
+    btnLista: TButton;
     procedure bCriarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure lerArquivo(Sender: TObject);
     procedure bCriarFormClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure cdsObjetosAfterPost(DataSet: TDataSet);
+    procedure btnListaClick(Sender: TObject);
   private
     dir_base: String;
     arquivo : String;
     procedure generateEdit(aCds: TClientDataSet; aForm: TForm);
+    procedure generateMemo(aCds: TClientDataSet; aForm: TForm);
+    procedure generateDBEdit(aCds: TClientDataSet; aForm: TForm);
     procedure generateLabel(aCds: TClientDataSet; aForm: TForm);
+    procedure generatePanel(aCds: TClientDataSet; aForm: TForm);
     procedure generatePageControl(aCds: TClientDataSet; aForm: TForm);
     procedure generateTabSheet(aCds: TClientDataSet; aForm: TForm);
     procedure criarObjeto(aClasse: String);
@@ -58,6 +64,11 @@ begin
     Form2.release;
 	  Form2 := nil;
   End;
+end;
+
+procedure TForm1.btnListaClick(Sender: TObject);
+begin
+  lerArquivo(Sender);
 end;
 
 function TForm1.buscaPai(aCds: TClientDataSet; aForm: TForm) : TWinControl;
@@ -144,17 +155,61 @@ begin
   meuEdt.Height   := acds.FieldByName('height').AsInteger;
 end;
 
+procedure TForm1.generateMemo(aCds: TClientDataSet; aForm: TForm);
+var
+  meuMemo: TMemo;
+begin
+  meuMemo := TMemo.Create(aForm);
+  meuMemo.Name       := aCds.FieldByName('ds_nome').AsString;
+  meuMemo.Parent     := buscaPai(aCds, Form2);
+  meuMemo.Left       := acds.FieldByName('left').AsInteger;
+  meuMemo.Top        := acds.FieldByName('top').AsInteger;
+  meuMemo.Width      := acds.FieldByName('Width').AsInteger;
+  meuMemo.Height     := acds.FieldByName('height').AsInteger;
+end;
+
+procedure TForm1.generateDBEdit(aCds: TClientDataSet; aForm: TForm);
+var
+  meuDBEdt: TDBEdit;
+begin
+  meuDBEdt := TDBEdit.Create(aForm);
+  meuDBEdt.Name       := aCds.FieldByName('ds_nome').AsString;
+  meuDBEdt.Parent     := buscaPai(aCds, Form2);
+  meuDBEdt.Left       := acds.FieldByName('left').AsInteger;
+  meuDBEdt.Top        := acds.FieldByName('top').AsInteger;
+  meuDBEdt.Width      := acds.FieldByName('Width').AsInteger;
+  meuDBEdt.Height     := acds.FieldByName('height').AsInteger;
+  meuDBEdt.DataField  := acds.FieldByName('data_field').AsString;
+  meuDBEdt.DataSource := TDataSource(acds.FieldByName('data_source').AsInteger);
+end;
+
 procedure TForm1.generateLabel(aCds: TClientDataSet; aForm: TForm);
 var
   meuLbl: TLabel;
 begin
   meuLbl := TLabel.Create(aForm);
   meuLbl.Name     := aCds.FieldByName('ds_nome').AsString;
+  meuLbl.Caption  := aCds.FieldByName('ds_caption').AsString;
   meuLbl.Parent   := buscaPai(aCds, Form2);
   meuLbl.Left     := acds.FieldByName('left').AsInteger;
   meuLbl.Top      := acds.FieldByName('top').AsInteger;
   meuLbl.Width    := acds.FieldByName('Width').AsInteger;
   meuLbl.Height   := acds.FieldByName('height').AsInteger;
+end;
+
+procedure TForm1.generatePanel(aCds: TClientDataSet; aForm: TForm);
+var
+  meuPn: TPanel;
+begin
+  meuPn := TPanel.Create(aForm);
+  meuPn.Name     := aCds.FieldByName('ds_nome').AsString;
+  meuPn.Caption  := aCds.FieldByName('ds_caption').AsString;
+  meuPn.Parent   := buscaPai(aCds, Form2);
+  meuPn.Left     := acds.FieldByName('left').AsInteger;
+  meuPn.Top      := acds.FieldByName('top').AsInteger;
+  meuPn.Width    := acds.FieldByName('Width').AsInteger;
+  meuPn.Height   := acds.FieldByName('height').AsInteger;
+  meuPn.Align    := alClient;
 end;
 
 procedure TForm1.cdsObjetosAfterPost(DataSet: TDataSet);
@@ -178,6 +233,17 @@ begin
   else
     if (aClasse = 'TLABEL') then
      generateLabel(cdsObjetos, Form2)
+  else
+    if (aClasse = 'TPANEL') then
+     generatePanel(cdsObjetos, Form2)
+  else
+    if (aClasse = 'TDBEDIT') then
+     generateDBEdit(cdsObjetos, Form2)
+  else
+    if (aClasse = 'TMEMO') then
+     generateMemo(cdsObjetos, Form2)
+  else
+     ShowMessage('Classe não tratada: ' + aClasse);
 end;
 
 procedure TForm1.bCriarClick(Sender: TObject);
@@ -190,11 +256,72 @@ begin
   end;
 end;
 
+procedure TForm1.lerArquivo(Sender: TObject);
+var
+  script: TStrings;
+  arquivo: TextFile;
+  linha: String;
+  nmarquivo, linhaMemo: String;
+  i : integer;
+
+begin
+  script := TStringList.Create;
+
+  //está sendo usado em vários lugares
+  dir_base := ExtractFilePath(ParamStr(0));
+  nmarquivo  := 'log.txt';
+
+  AssignFile(arquivo,dir_base + nmarquivo);
+  Reset(arquivo);
+
+  cdsObjetos.First;
+  while not eof (arquivo) do
+  begin
+    Readln(arquivo, linha);
+    script.Delimiter := ';';
+    script.DelimitedText := linha;
+
+    if linha <> '' then
+    begin
+      cdsObjetos.Insert;
+      cdsObjetos.FieldByName('id_order').AsInteger  := StrToInt(script[0]);
+      cdsObjetos.FieldByName('ds_nome').AsString    := script[1];
+      cdsObjetos.FieldByName('ds_class').AsString   := script[2];
+      cdsObjetos.FieldByName('ds_parent').AsString  := script[3];
+      cdsObjetos.FieldByName('left').AsInteger      := StrToInt(script[4]);
+      cdsObjetos.FieldByName('height').AsInteger    := StrToInt(script[5]);
+      cdsObjetos.FieldByName('top').AsInteger       := StrToInt(script[6]);
+      cdsObjetos.FieldByName('width').AsInteger     := StrToInt(script[7]);
+      cdsObjetos.FieldByName('ds_caption').AsString := script[8];
+      cdsObjetos.FieldByName('data_source').AsString  := script[9];
+      cdsObjetos.FieldByName('data_field').AsString   := script[10];
+      cdsObjetos.Post;
+
+
+      memoPrincipal.Lines.Add(cdsObjetos.FieldByName('id_order').AsString);
+      memoPrincipal.Lines.Add(cdsObjetos.FieldByName('ds_nome').AsString);
+      memoPrincipal.Lines.Add(cdsObjetos.FieldByName('ds_class').AsString);
+    end;
+
+    cdsObjetos.Next;
+  end;
+
+  CloseFile(arquivo);
+
+ {
+  //script.LoadFromFile(dir_base + arquivo);
+  script.Delimiter := ';';
+  script.DelimitedText := ('"id_order";"ds_nome";"ds_class";"ds_parent";"left";"left";"top";"width";"ds_caption";"data_source";"data_field"');
+  memoPrincipal.Lines.AddStrings(script);
+  }
+end;
+
 procedure TForm1.FormCreate(Sender: TObject);
 begin
 
   dir_base := ExtractFilePath(ParamStr(0));
   arquivo  := 'Objetos.dat';
+
 
    {object cdsObjetosag_max: TAggregateField
     FieldName = 'ag_max'
