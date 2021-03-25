@@ -18,8 +18,8 @@ object Form1: TForm1
   object memoPrincipal: TMemo
     Left = 8
     Top = 8
-    Width = 721
-    Height = 168
+    Width = 433
+    Height = 353
     TabOrder = 0
   end
   object bCriarForm: TButton
@@ -49,6 +49,27 @@ object Form1: TForm1
     TabOrder = 3
     OnClick = btnListaClick
   end
+  object memo2: TListBox
+    Left = 496
+    Top = 296
+    Width = 377
+    Height = 328
+    ItemHeight = 13
+    TabOrder = 4
+  end
+  object DBGrid1: TDBGrid
+    Left = 8
+    Top = 375
+    Width = 457
+    Height = 265
+    DataSource = ds
+    TabOrder = 5
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+  end
   object cdsObjetos: TClientDataSet
     Aggregates = <>
     Params = <>
@@ -61,5 +82,10 @@ object Form1: TForm1
       DisplayName = ''
       Expression = 'max(id_order)'
     end
+  end
+  object ds: TDataSource
+    DataSet = cdsObjetos
+    Left = 552
+    Top = 24
   end
 end
