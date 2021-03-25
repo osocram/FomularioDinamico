@@ -13,25 +13,14 @@ object Form2: TForm2
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
-  object pnl22: TPanel
+  object pnlPrincipal: TPanel
     Left = 0
     Top = 0
     Width = 610
     Height = 671
     Align = alClient
-    Caption = 'pnl22'
+    Caption = 'pnlPrincipal'
     TabOrder = 0
-    ExplicitTop = 105
-    ExplicitHeight = 566
-    object pg: TPageControl
-      Left = 1
-      Top = 1
-      Width = 608
-      Height = 669
-      Align = alClient
-      TabOrder = 0
-      ExplicitHeight = 564
-    end
   end
   object cdsCadastroTela: TClientDataSet
     Aggregates = <>
