@@ -16,9 +16,11 @@ type
     Button1: TButton;
     cdsObjetosag_max: TAggregateField;
     btnLista: TButton;
-    memo2: TListBox;
     ds: TDataSource;
     DBGrid1: TDBGrid;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
     procedure bCriarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure lerArquivo(Sender: TObject);
@@ -78,8 +80,6 @@ begin
   Finally
     Form2.release;
 	  Form2 := nil;
-    Memo2.Sorted := True;
-    memoPrincipal.Lines.Text := Memo2.Items.Text;
   End;
 end;
 
@@ -143,6 +143,7 @@ begin
   meuPc.Top      := aCds.FieldByName('top').AsInteger;
   meuPc.Width    := aCds.FieldByName('width').AsInteger;
   meuPc.Height   := aCds.FieldByName('height').AsInteger;
+  meuPc.Align    := alClient;
 end;
 
 procedure TForm1.generateTabSheet(aCds: TClientDataSet; aForm: TForm);
@@ -474,7 +475,7 @@ begin
     if (aClasse = 'TSCROLLBAR') then
       generateSbar(cdsObjetos, Form2)
   else
-      memo2.Items.Add(aClasse);
+      memoPrincipal.Lines.Add('ERRO classe não tratada: '+aClasse);
 end;
 
 procedure TForm1.bCriarClick(Sender: TObject);
@@ -493,6 +494,7 @@ var
   arquivo: TextFile;
   linha: String;
   nmarquivo, linhaMemo: String;
+  ordem:integer;
 
   begin
   script := TStringList.Create;
@@ -503,6 +505,7 @@ var
   AssignFile(arquivo,dir_base + nmarquivo);
   Reset(arquivo);
 
+  ordem := 0;
   cdsObjetos.First;
   while not eof (arquivo) do
   begin
@@ -513,7 +516,9 @@ var
     if linha <> '' then
     begin
       cdsObjetos.Insert;
-      cdsObjetos.FieldByName('id_order').AsInteger  := StrToInt(script[0]);
+      inc(ordem);
+
+      cdsObjetos.FieldByName('id_order').AsInteger  := (ordem);
       cdsObjetos.FieldByName('ds_nome').AsString    := script[1];
       cdsObjetos.FieldByName('ds_class').AsString   := script[2];
       cdsObjetos.FieldByName('ds_parent').AsString  := script[3];

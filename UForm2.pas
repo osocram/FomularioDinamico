@@ -9,7 +9,7 @@ uses
 
 type
   TForm2 = class(TForm)
-    pnl22: TPanel;
+    pnlPrincipal: TPanel;
     cdsCadastroTela: TClientDataSet;
     dsCadastroTela: TDataSource;
     CdsAtendimento: TClientDataSet;
@@ -609,7 +609,6 @@ type
     CdsEvolucaoV_CATEGORIA_DESC: TStringField;
     CdsEvolucaoI_CONTARECEBER_ID: TIntegerField;
     DsEvolucao: TDataSource;
-    pg: TPageControl;
   private
     { Private declarations }
   public

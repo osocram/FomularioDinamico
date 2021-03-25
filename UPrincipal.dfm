@@ -15,60 +15,103 @@ object Form1: TForm1
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
-  object memoPrincipal: TMemo
-    Left = 8
-    Top = 8
-    Width = 433
-    Height = 353
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 736
+    Height = 496
+    Align = alClient
+    Caption = 'Log'
     TabOrder = 0
+    ExplicitLeft = 368
+    ExplicitTop = 48
+    ExplicitWidth = 185
+    ExplicitHeight = 105
+    object memoPrincipal: TMemo
+      Left = 2
+      Top = 15
+      Width = 732
+      Height = 479
+      Align = alClient
+      TabOrder = 0
+      ExplicitLeft = -248
+      ExplicitTop = -248
+      ExplicitWidth = 433
+      ExplicitHeight = 353
+    end
   end
-  object bCriarForm: TButton
-    Left = 735
-    Top = 16
-    Width = 178
-    Height = 49
-    Caption = 'Criar Form'
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 496
+    Width = 921
+    Height = 152
+    Align = alBottom
+    Caption = 'Lista de dados'
     TabOrder = 1
-    OnClick = bCriarFormClick
+    object btnLista: TButton
+      AlignWithMargins = True
+      Left = 5
+      Top = 18
+      Width = 87
+      Height = 129
+      Align = alLeft
+      Caption = 'Carregar Lista'
+      TabOrder = 0
+      OnClick = btnListaClick
+      ExplicitLeft = 2
+      ExplicitTop = 15
+      ExplicitHeight = 135
+    end
+    object DBGrid1: TDBGrid
+      Left = 95
+      Top = 15
+      Width = 824
+      Height = 135
+      Align = alClient
+      DataSource = ds
+      TabOrder = 1
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+    end
   end
-  object Button1: TButton
-    Left = 735
-    Top = 88
-    Width = 178
-    Height = 49
-    Caption = 'Adicionar tela de cadastro'
+  object GroupBox3: TGroupBox
+    Left = 736
+    Top = 0
+    Width = 185
+    Height = 496
+    Align = alRight
+    Caption = 'A'#231#245'es'
     TabOrder = 2
-    OnClick = Button1Click
-  end
-  object btnLista: TButton
-    Left = 768
-    Top = 143
-    Width = 105
-    Height = 33
-    Caption = 'Carregar Lista'
-    TabOrder = 3
-    OnClick = btnListaClick
-  end
-  object memo2: TListBox
-    Left = 496
-    Top = 296
-    Width = 377
-    Height = 328
-    ItemHeight = 13
-    TabOrder = 4
-  end
-  object DBGrid1: TDBGrid
-    Left = 8
-    Top = 375
-    Width = 457
-    Height = 265
-    DataSource = ds
-    TabOrder = 5
-    TitleFont.Charset = DEFAULT_CHARSET
-    TitleFont.Color = clWindowText
-    TitleFont.Height = -11
-    TitleFont.Name = 'Tahoma'
-    TitleFont.Style = []
+    ExplicitLeft = 376
+    ExplicitTop = 288
+    ExplicitHeight = 105
+    object Button1: TButton
+      AlignWithMargins = True
+      Left = 5
+      Top = 81
+      Width = 175
+      Height = 50
+      Margins.Top = 10
+      Align = alTop
+      Caption = 'Adicionar tela de cadastro'
+      TabOrder = 0
+      OnClick = Button1Click
+      ExplicitTop = 73
+    end
+    object bCriarForm: TButton
+      AlignWithMargins = True
+      Left = 5
+      Top = 18
+      Width = 175
+      Height = 50
+      Align = alTop
+      Caption = 'Criar Form'
+      TabOrder = 1
+      OnClick = bCriarFormClick
+    end
   end
   object cdsObjetos: TClientDataSet
     Aggregates = <>
