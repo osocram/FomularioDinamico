@@ -9,8 +9,7 @@ uses
 
 type
   TForm2 = class(TForm)
-    GroupBox1: TGroupBox;
-    Panel1: TPanel;
+    pnl22: TPanel;
     cdsCadastroTela: TClientDataSet;
     dsCadastroTela: TDataSource;
     CdsAtendimento: TClientDataSet;

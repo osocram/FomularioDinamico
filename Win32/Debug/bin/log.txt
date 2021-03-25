@@ -4,12 +4,12 @@
 "4";"LblCampoFiltrado";"TLabel";"PnlConsulta";"515";"515";"6";"86";"CAMPO FILTRAR";"";"";
 "5";"LblOperacao";"TLabel";"PnlConsulta";"695";"695";"6";"59";"OPERAÇÃO";"";"";
 "6";"LblProcura";"TLabel";"PnlConsulta";"785";"785";"6";"54";"PESQUISA";"";"";
-"7";"";"TEditLabel";"PnlConsulta";"9";"9";"1";"27";"Nome";"";"";
+"7";"";"TLabel";"PnlConsulta";"9";"9";"1";"27";"Nome";"";"";
 "8";"";"TLabel";"PnlConsulta";"323";"323";"1";"131";"Data Previsão Atendimento";"";"";
 "9";"";"TLabel";"PnlConsulta";"532";"532";"1";"30";"Ativo?";"";"";
 "10";"CbCampo";"TComboBox";"PnlConsulta";"497";"497";"33";"180";"";"";"";
 "11";"CbOperacao";"TComboBox";"PnlConsulta";"526";"526";"6";"90";"";"";"";
-"12";"EdTextoPesquisa";"TPhiEdit";"PnlConsulta";"436";"436";"6";"200";"";"";"";
+"12";"EdTextoPesquisa";"TDBEdit";"PnlConsulta";"436";"436";"6";"200";"";"";"";
 "13";"DtpDataPesquisa";"TDateTimePicker";"PnlConsulta";"526";"526";"-2";"90";"";"";"";
 "14";"DtpDataPesquisaEntre";"TDateTimePicker";"PnlConsulta";"515";"515";"6";"90";"";"";"";
 "15";"Bt_Filtrar";"TBitBtn";"PnlConsulta";"551";"551";"19";"45";"Filtrar";"";"";
@@ -19,7 +19,7 @@
 "19";"";"TAdvSpeedButton";"";"0";"0";"0";"0";"";"";"";
 "18";"edFiltroDt_previsao";"TS100FiltroDateTime";"PnlConsulta";"323";"323";"18";"134";"";"";"";
 "19";"cbFiltroBo_Ativo";"TS100FiltroCombobox";"PnlConsulta";"532";"532";"18";"145";"";"";"";
-"2";"TabDados";"TTabSheet";"PcTelaCad";"4";"4";"24";"1898";"Dados";"";"";
+"2";"TabDados";"TTabSheet";"pg";"4";"4";"24";"1898";"Dados";"";"";
 "3";"PnlTopo";"TPanel";"TabDados";"0";"0";"0";"1898";"";"";"";
 "4";"LblCodigo";"TLabel";"PnlTopo";"9";"9";"6";"33";"Código";"";"";
 "5";"LblCliente";"TLabel";"PnlTopo";"10";"10";"55";"42";"Paciente";"";"";
@@ -40,7 +40,7 @@
 "5";"PcAtendimento";"TPageControl";"PnlClient";"0";"0";"0";"1898";"";"";"";
 "6";"TabQpHma";"TTabSheet";"PcAtendimento";"4";"4";"61";"1890";"Q.P. / H.M.A.";"";"";
 "7";"Panel2";"TPanel";"TabQpHma";"0";"0";"0";"937";"";"";"";
-"8";"AdvSplitter1";"TAdvSplitter";"Panel2";"724";"724";"1";"12";"";"";"";
+
 "9";"Panel3";"TPanel";"Panel2";"1";"1";"1";"723";"";"";"";
 "10";"Panel6";"TPanel";"Panel3";"1";"1";"1";"721";"";"";"";
 "11";"LblQp";"TLabel";"Panel6";"10";"10";"5";"78";"Q.P. (244 ) ";"";"";

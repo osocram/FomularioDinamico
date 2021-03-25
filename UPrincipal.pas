@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Data.DB, Datasnap.DBClient, uForm2,
-  Vcl.ExtCtrls, Vcl.DBCtrls, UCadastro;
+  Vcl.ExtCtrls, Vcl.DBCtrls, UCadastro, Vcl.Grids, Vcl.DBGrids, Vcl.Buttons;
 
 
 type
@@ -16,6 +16,9 @@ type
     Button1: TButton;
     cdsObjetosag_max: TAggregateField;
     btnLista: TButton;
+    memo2: TListBox;
+    ds: TDataSource;
+    DBGrid1: TDBGrid;
     procedure bCriarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure lerArquivo(Sender: TObject);
@@ -28,9 +31,21 @@ type
     arquivo : String;
     procedure generateEdit(aCds: TClientDataSet; aForm: TForm);
     procedure generateMemo(aCds: TClientDataSet; aForm: TForm);
+    procedure generateDBMemo(aCds: TClientDataSet; aForm: TForm);
+    procedure generateGB(aCds: TClientDataSet; aForm: TForm);
+    procedure generateDTP(aCds: TClientDataSet; aForm: TForm);
+    procedure generateSbar(aCds: TClientDataSet; aForm: TForm);
+    procedure generateDBcb(aCds: TClientDataSet; aForm: TForm);
+    procedure generateSBtn(aCds: TClientDataSet; aForm: TForm);
+    procedure generateBBtn(aCds: TClientDataSet; aForm: TForm);
+    procedure generateButton(aCds: TClientDataSet; aForm: TForm);
+    procedure generateImg(aCds: TClientDataSet; aForm: TForm);
     procedure generateDBEdit(aCds: TClientDataSet; aForm: TForm);
     procedure generateLabel(aCds: TClientDataSet; aForm: TForm);
     procedure generatePanel(aCds: TClientDataSet; aForm: TForm);
+    procedure generateDBGrid(aCds: TClientDataSet; aForm: TForm);
+    procedure generateSB(aCds: TClientDataSet; aForm: TForm);
+    procedure generateCB(aCds: TClientDataSet; aForm: TForm);
     procedure generatePageControl(aCds: TClientDataSet; aForm: TForm);
     procedure generateTabSheet(aCds: TClientDataSet; aForm: TForm);
     procedure criarObjeto(aClasse: String);
@@ -63,11 +78,19 @@ begin
   Finally
     Form2.release;
 	  Form2 := nil;
+    Memo2.Sorted := True;
+    memoPrincipal.Lines.Text := Memo2.Items.Text;
   End;
 end;
 
 procedure TForm1.btnListaClick(Sender: TObject);
 begin
+  cdsObjetos.First;
+  while (not cdsObjetos.Eof) do
+    cdsObjetos.Delete;
+
+  cdsObjetos.SaveToFile(dir_base + arquivo, dfBinary);
+
   lerArquivo(Sender);
 end;
 
@@ -152,7 +175,7 @@ begin
   meuEdt.Left     := acds.FieldByName('left').AsInteger;
   meuEdt.Top      := acds.FieldByName('top').AsInteger;
   meuEdt.Width    := acds.FieldByName('Width').AsInteger;
-  meuEdt.Height   := acds.FieldByName('height').AsInteger;
+  //meuEdt.Height   := acds.FieldByName('height').AsInteger;
 end;
 
 procedure TForm1.generateMemo(aCds: TClientDataSet; aForm: TForm);
@@ -165,7 +188,126 @@ begin
   meuMemo.Left       := acds.FieldByName('left').AsInteger;
   meuMemo.Top        := acds.FieldByName('top').AsInteger;
   meuMemo.Width      := acds.FieldByName('Width').AsInteger;
-  meuMemo.Height     := acds.FieldByName('height').AsInteger;
+  //meuMemo.Height     := acds.FieldByName('height').AsInteger;
+end;
+
+procedure TForm1.generateDBMemo(aCds: TClientDataSet; aForm: TForm);
+var
+  meuDBMemo: TDBMemo;
+begin
+  meuDBMemo := TDBMemo.Create(aForm);
+  meuDBMemo.Name       := aCds.FieldByName('ds_nome').AsString;
+  meuDBMemo.Parent     := buscaPai(aCds, Form2);
+  meuDBMemo.Left       := acds.FieldByName('left').AsInteger;
+  meuDBMemo.Top        := acds.FieldByName('top').AsInteger;
+  meuDBMemo.Width      := acds.FieldByName('Width').AsInteger;
+  //meuDBMemo.Height     := acds.FieldByName('height').AsInteger;
+  meuDBMemo.DataSource := TDataSource(FindComponent(acds.FieldByName('data_source').AsString));
+end;
+
+procedure TForm1.generateGB(aCds: TClientDataSet; aForm: TForm);
+var
+  meuGB: TGroupBox;
+begin
+  meuGB := TGroupBox.Create(aForm);
+  meuGB.Name       := aCds.FieldByName('ds_nome').AsString;
+  meuGB.Parent     := buscaPai(aCds, Form2);
+  meuGB.Left       := acds.FieldByName('left').AsInteger;
+  meuGB.Top        := acds.FieldByName('top').AsInteger;
+  meuGB.Width      := acds.FieldByName('Width').AsInteger;
+  meuGB.Height     := acds.FieldByName('height').AsInteger;
+end;
+
+procedure TForm1.generateDTP(aCds: TClientDataSet; aForm: TForm);
+var
+  meuDTP: TDateTimePicker;
+begin
+  meuDTP := TDateTimePicker.Create(aForm);
+  meuDTP.Name       := aCds.FieldByName('ds_nome').AsString;
+  meuDTP.Parent     := buscaPai(aCds, Form2);
+  meuDTP.Left       := acds.FieldByName('left').AsInteger;
+  meuDTP.Top        := acds.FieldByName('top').AsInteger;
+  meuDTP.Width      := acds.FieldByName('Width').AsInteger;
+//  meuDTP.Height     := acds.FieldByName('height').AsInteger;
+end;
+
+procedure TForm1.generateSbar(aCds: TClientDataSet; aForm: TForm);
+var
+  meuSbar: TScrollBar;
+begin
+  meuSbar := TScrollBar.Create(aForm);
+  meuSbar.Name       := aCds.FieldByName('ds_nome').AsString;
+  meuSbar.Parent     := buscaPai(aCds, Form2);
+  meuSbar.Left       := acds.FieldByName('left').AsInteger;
+  meuSbar.Top        := acds.FieldByName('top').AsInteger;
+  meuSbar.Width      := acds.FieldByName('Width').AsInteger;
+//  meuDt.Height     := acds.FieldByName('height').AsInteger;
+end;
+
+procedure TForm1.generateDBcb(aCds: TClientDataSet; aForm: TForm);
+var
+  meuDBcb: TDBCheckBox;
+begin
+  meuDBcb := TDBCheckBox.Create(aForm);
+  meuDBcb.Name       := aCds.FieldByName('ds_nome').AsString;
+  meuDBcb.Parent     := buscaPai(aCds, Form2);
+  meuDBcb.Left       := acds.FieldByName('left').AsInteger;
+  meuDBcb.Top        := acds.FieldByName('top').AsInteger;
+  meuDBcb.Width      := acds.FieldByName('Width').AsInteger;
+  //meuDBcb.Height     := acds.FieldByName('height').AsInteger;
+  meuDBcb.DataSource := TDataSource(FindComponent(acds.FieldByName('data_source').AsString));
+end;
+
+procedure TForm1.generateSBtn(aCds: TClientDataSet; aForm: TForm);
+var
+  meuSBtn: TSpeedButton;
+begin
+  meuSBtn := TSpeedButton.Create(aForm);
+  meuSBtn.Name       := aCds.FieldByName('ds_nome').AsString;
+  meuSBtn.Parent     := buscaPai(aCds, Form2);
+  meuSBtn.Left       := acds.FieldByName('left').AsInteger;
+  meuSBtn.Top        := acds.FieldByName('top').AsInteger;
+  meuSBtn.Width      := acds.FieldByName('Width').AsInteger;
+  //meuSBtn.Height     := acds.FieldByName('height').AsInteger;
+end;
+
+procedure TForm1.generateBBtn(aCds: TClientDataSet; aForm: TForm);
+var
+  meuBBtn: TBitBtn;
+begin
+  meuBBtn := TBitBtn.Create(aForm);
+  meuBBtn.Name       := aCds.FieldByName('ds_nome').AsString;
+  meuBBtn.Parent     := buscaPai(aCds, Form2);
+  meuBBtn.Left       := acds.FieldByName('left').AsInteger;
+  meuBBtn.Top        := acds.FieldByName('top').AsInteger;
+  meuBBtn.Width      := acds.FieldByName('Width').AsInteger;
+  //meuBBtn.Height     := acds.FieldByName('height').AsInteger;
+end;
+
+procedure TForm1.generateButton(aCds: TClientDataSet; aForm: TForm);
+var
+  meuButton: TButton;
+begin
+  meuButton := TButton.Create(aForm);
+  meuButton.Name       := aCds.FieldByName('ds_nome').AsString;
+  meuButton.Parent     := buscaPai(aCds, Form2);
+  meuButton.Left       := acds.FieldByName('left').AsInteger;
+  meuButton.Top        := acds.FieldByName('top').AsInteger;
+  meuButton.Width      := acds.FieldByName('Width').AsInteger;
+  //meuButton.Height     := acds.FieldByName('height').AsInteger;
+end;
+
+procedure TForm1.generateImg(aCds: TClientDataSet; aForm: TForm);
+var
+  meuUmg: TImage;
+begin
+  meuUmg := TImage.Create(aForm);
+  meuUmg.Name       := aCds.FieldByName('ds_nome').AsString;
+  meuUmg.Parent     := buscaPai(aCds, Form2);
+  meuUmg.Left       := acds.FieldByName('left').AsInteger;
+  meuUmg.Top        := acds.FieldByName('top').AsInteger;
+  meuUmg.Width      := acds.FieldByName('Width').AsInteger;
+  //meuUmg.Height     := acds.FieldByName('height').AsInteger;
 end;
 
 procedure TForm1.generateDBEdit(aCds: TClientDataSet; aForm: TForm);
@@ -178,9 +320,9 @@ begin
   meuDBEdt.Left       := acds.FieldByName('left').AsInteger;
   meuDBEdt.Top        := acds.FieldByName('top').AsInteger;
   meuDBEdt.Width      := acds.FieldByName('Width').AsInteger;
-  meuDBEdt.Height     := acds.FieldByName('height').AsInteger;
+  //meuDBEdt.Height     := acds.FieldByName('height').AsInteger;
   meuDBEdt.DataField  := acds.FieldByName('data_field').AsString;
-  meuDBEdt.DataSource := TDataSource(acds.FieldByName('data_source').AsInteger);
+  meuDBEdt.DataSource := TDataSource(FindComponent(acds.FieldByName('data_source').AsString));
 end;
 
 procedure TForm1.generateLabel(aCds: TClientDataSet; aForm: TForm);
@@ -194,7 +336,7 @@ begin
   meuLbl.Left     := acds.FieldByName('left').AsInteger;
   meuLbl.Top      := acds.FieldByName('top').AsInteger;
   meuLbl.Width    := acds.FieldByName('Width').AsInteger;
-  meuLbl.Height   := acds.FieldByName('height').AsInteger;
+  //meuLbl.Height   := acds.FieldByName('height').AsInteger;
 end;
 
 procedure TForm1.generatePanel(aCds: TClientDataSet; aForm: TForm);
@@ -210,6 +352,48 @@ begin
   meuPn.Width    := acds.FieldByName('Width').AsInteger;
   meuPn.Height   := acds.FieldByName('height').AsInteger;
   meuPn.Align    := alClient;
+end;
+
+procedure TForm1.generateDBGrid(aCds: TClientDataSet; aForm: TForm);
+var
+  meuDBGrid: TDBGrid;
+begin
+  meuDBGrid := TDBGrid.Create(aForm);
+  meuDBGrid.Name     := aCds.FieldByName('ds_nome').AsString;
+  meuDBGrid.Parent   := buscaPai(aCds, Form2);
+  meuDBGrid.Left     := acds.FieldByName('left').AsInteger;
+  meuDBGrid.Top      := acds.FieldByName('top').AsInteger;
+  meuDBGrid.Width    := acds.FieldByName('Width').AsInteger;
+ // meuDBGrid.Height   := acds.FieldByName('height').AsInteger;
+  meuDBGrid.Align    := alClient;
+end;
+
+procedure TForm1.generateSB(aCds: TClientDataSet; aForm: TForm);
+var
+  meuSB: TScrollBox;
+begin
+  meuSB := TScrollBox.Create(aForm);
+  meuSB.Name     := aCds.FieldByName('ds_nome').AsString;
+  meuSB.Parent   := buscaPai(aCds, Form2);
+  meuSB.Left     := acds.FieldByName('left').AsInteger;
+  meuSB.Top      := acds.FieldByName('top').AsInteger;
+  meuSB.Width    := acds.FieldByName('Width').AsInteger;
+  //meuSB.Height   := acds.FieldByName('height').AsInteger;
+  meuSB.Align    := alClient;
+end;
+
+procedure TForm1.generateCB(aCds: TClientDataSet; aForm: TForm);
+var
+  meuCB: TComboBox;
+begin
+  meuCB := TComboBox.Create(aForm);
+  meuCB.Name     := aCds.FieldByName('ds_nome').AsString;
+  meuCB.Parent   := buscaPai(aCds, Form2);
+  meuCB.Left     := acds.FieldByName('left').AsInteger;
+  meuCB.Top      := acds.FieldByName('top').AsInteger;
+  meuCB.Width    := acds.FieldByName('Width').AsInteger;
+  //meuCB.Height   := acds.FieldByName('height').AsInteger;
+  meuCB.Align    := alClient;
 end;
 
 procedure TForm1.cdsObjetosAfterPost(DataSet: TDataSet);
@@ -228,7 +412,10 @@ begin
   if (aClasse = 'TTABSHEET') then
      generateTabSheet(cdsObjetos, Form2)
   else
-    if (aClasse = 'TEDIT') then
+    if (aClasse = 'TEDIT') or
+       (aClasse = 'TDXTOKENEDITINNEREDIT') or
+       (aClasse = 'TEDITBUTTON') or
+       (aClasse = 'TS100FILTROEDIT') then
      generateEdit(cdsObjetos, Form2)
   else
     if (aClasse = 'TLABEL') then
@@ -237,13 +424,57 @@ begin
     if (aClasse = 'TPANEL') then
      generatePanel(cdsObjetos, Form2)
   else
-    if (aClasse = 'TDBEDIT') then
+    if (aClasse = 'TDBEDIT') or
+       (aClasse = 'TADVDBDATETIMEPICKER') or
+       (aClasse = 'TDXDBTOKENEDIT') then
      generateDBEdit(cdsObjetos, Form2)
   else
     if (aClasse = 'TMEMO') then
      generateMemo(cdsObjetos, Form2)
   else
-     ShowMessage('Classe não tratada: ' + aClasse);
+    if (aClasse = 'TDBGRID') then
+     generateDBGrid(cdsObjetos, Form2)
+  else
+    if (aClasse = 'TSCROLLBOX') then
+     generateSB(cdsObjetos, Form2)
+  else
+    if (aClasse = 'TCOMBOBOX') or
+       (aClasse = 'TS100FILTROCOMBOBOX')then
+     generateCB(cdsObjetos, Form2)
+  else
+    if (aClasse = 'TDBMEMO') or
+       (aClasse = 'TDBADVMEMO') then
+     generateDBMemo(cdsObjetos, Form2)
+  else
+    if (aClasse = 'TGROUPBOX') then
+     generateGB(cdsObjetos, Form2)
+  else
+    if (aClasse = 'TDATETIMEPICKER') or
+       (aClasse = 'TCUSTOMDATETIMEPICKER') or
+       (aClasse = 'TS100FILTRODATETIME') then
+     generateDTP(cdsObjetos, Form2)
+  else
+    if (aClasse = 'TDBCHECKBOX') or
+       (aClasse = 'TSOCDBCHECKBOX') then
+      generateDBcb(cdsObjetos, Form2)
+  else
+    if (aClasse = 'TSPEEDBUTTON') or
+       (aClasse = 'TADVSPEEDBUTTON') then
+      generateSBtn(cdsObjetos, Form2)
+  else
+    if (aClasse = 'TBITBTN') then
+      generateBBtn(cdsObjetos, Form2)
+  else
+    if (aClasse = 'TBUTTON') then
+      generateButton(cdsObjetos, Form2)
+  else
+    if (aClasse = 'TIMAGE') then
+      generateImg(cdsObjetos, Form2)
+  else
+    if (aClasse = 'TSCROLLBAR') then
+      generateSbar(cdsObjetos, Form2)
+  else
+      memo2.Items.Add(aClasse);
 end;
 
 procedure TForm1.bCriarClick(Sender: TObject);
@@ -262,15 +493,13 @@ var
   arquivo: TextFile;
   linha: String;
   nmarquivo, linhaMemo: String;
-  i : integer;
 
-begin
+  begin
   script := TStringList.Create;
 
   //está sendo usado em vários lugares
   dir_base := ExtractFilePath(ParamStr(0));
   nmarquivo  := 'log.txt';
-
   AssignFile(arquivo,dir_base + nmarquivo);
   Reset(arquivo);
 
@@ -296,7 +525,6 @@ begin
       cdsObjetos.FieldByName('data_source').AsString  := script[9];
       cdsObjetos.FieldByName('data_field').AsString   := script[10];
       cdsObjetos.Post;
-
 
       memoPrincipal.Lines.Add(cdsObjetos.FieldByName('id_order').AsString);
       memoPrincipal.Lines.Add(cdsObjetos.FieldByName('ds_nome').AsString);
