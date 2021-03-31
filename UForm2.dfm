@@ -3,7 +3,7 @@ object Form2: TForm2
   Top = 0
   Caption = 'Form2'
   ClientHeight = 671
-  ClientWidth = 610
+  ClientWidth = 458
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,22 +15,48 @@ object Form2: TForm2
   TextHeight = 13
   object pnlPrincipal: TPanel
     Left = 0
-    Top = 0
-    Width = 610
-    Height = 671
+    Top = 41
+    Width = 458
+    Height = 630
     Align = alClient
     Caption = 'pnlPrincipal'
     TabOrder = 0
   end
+  object pFiltro: TPanel
+    Left = 0
+    Top = 0
+    Width = 458
+    Height = 41
+    Align = alTop
+    TabOrder = 1
+    object edtFiltro: TEdit
+      Left = 183
+      Top = 11
+      Width = 125
+      Height = 21
+      TabOrder = 0
+      Text = 'edtFiltro'
+    end
+    object Procurar: TButton
+      Left = 310
+      Top = 10
+      Width = 75
+      Height = 25
+      Caption = 'Procurar'
+      TabOrder = 1
+      OnClick = ProcurarClick
+    end
+  end
   object cdsCadastroTela: TClientDataSet
     Aggregates = <>
     Params = <>
-    Left = 120
-    Top = 409
+    Left = 304
+    Top = 65
   end
   object dsCadastroTela: TDataSource
-    Left = 224
-    Top = 409
+    DataSet = cdsCadastroTela
+    Left = 304
+    Top = 113
   end
   object CdsAtendimento: TClientDataSet
     Aggregates = <>
@@ -38,7 +64,7 @@ object Form2: TForm2
     Params = <>
     ProviderName = 'DspAtendimento'
     Left = 112
-    Top = 455
+    Top = 503
     object CdsAtendimentoI_ATENDIMENTO_ID: TIntegerField
       DisplayLabel = 'C'#211'DIGO'
       FieldName = 'I_ATENDIMENTO_ID'
@@ -748,13 +774,13 @@ object Form2: TForm2
   end
   object DsAntecedentes: TDataSource
     DataSet = CdsAntecedentes
-    Left = 104
-    Top = 423
+    Left = 160
+    Top = 463
   end
   object DsExames: TDataSource
     DataSet = CdsExames
-    Left = 216
-    Top = 431
+    Left = 248
+    Top = 463
   end
   object DsExamesFoto: TDataSource
     DataSet = CdsExamesFoto
@@ -763,8 +789,8 @@ object Form2: TForm2
   end
   object dsDiagnosticoOsteopatico: TDataSource
     DataSet = cdsDiagnosticoOsteopatico
-    Left = 366
-    Top = 290
+    Left = 286
+    Top = 242
   end
   object cdsDiagnosticoOsteopatico: TClientDataSet
     Aggregates = <>
@@ -796,7 +822,7 @@ object Form2: TForm2
     Aggregates = <>
     DataSetField = CdsExamesQExamesFoto
     Params = <>
-    Left = 50
+    Left = 82
     Top = 261
     object CdsExamesFotoI_EXAMEIMAGEM_FOTO_ID: TIntegerField
       DisplayLabel = 'C'#243'digo'
@@ -829,7 +855,7 @@ object Form2: TForm2
     DataSetField = cdsPacienteQExames
     Params = <>
     Left = 16
-    Top = 255
+    Top = 247
     object CdsExamesI_EXAMEIMAGEM_ID: TIntegerField
       DisplayLabel = 'C'#243'digo'
       FieldName = 'I_EXAMEIMAGEM_ID'

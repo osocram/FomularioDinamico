@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Data.DB,
-  Datasnap.DBClient, Vcl.ComCtrls;
+  Datasnap.DBClient, Vcl.ComCtrls, UCadastro;
 
 type
   TForm2 = class(TForm)
@@ -609,18 +609,46 @@ type
     CdsEvolucaoV_CATEGORIA_DESC: TStringField;
     CdsEvolucaoI_CONTARECEBER_ID: TIntegerField;
     DsEvolucao: TDataSource;
+    pFiltro: TPanel;
+    edtFiltro: TEdit;
+    Procurar: TButton;
+    procedure ProcurarClick(Sender: TObject);
   private
     { Private declarations }
   public
-    { Public declarations }
+    procedure cloneCDS(aCds: TClientDataset);
   end;
 
 var
   Form2: TForm2;
-  //teste
+  FCadastro: TFCadastro;
 
 implementation
 
 {$R *.dfm}
+
+
+procedure TForm2.cloneCDS(aCds: TClientDataset);
+begin
+  cdsCadastroTela.CloneCursor(aCds,true,true);
+end;
+
+procedure TForm2.ProcurarClick(Sender: TObject);
+begin
+  cdsCadastroTela.Filtered := false;
+  cdsCadastroTela.Filter := 'DS_NOME = ' + QuotedStr(edtFiltro.Text);
+  cdsCadastroTela.Filtered := true;
+
+  FCadastro := TFCadastro.create(nil);
+  Try
+    FCadastro.dsCadastro.DataSet := cdsCadastroTela;
+    FCadastro.Showmodal;
+  Finally
+    FCadastro.release;
+	  FCadastro := nil;
+  End;
+
+  cdsCadastroTela.Filtered := false;
+end;
 
 end.

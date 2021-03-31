@@ -5,8 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Data.DB, Datasnap.DBClient, uForm2,
-  Vcl.ExtCtrls, Vcl.DBCtrls, UCadastro, Vcl.Grids, Vcl.DBGrids, Vcl.Buttons;
-
+  Vcl.ExtCtrls, Vcl.DBCtrls, UCadastro, Vcl.Grids, Vcl.DBGrids, Vcl.Buttons, system.typInfo;
 
 type
   TForm1 = class(TForm)
@@ -74,7 +73,7 @@ begin
       criarObjeto(cdsObjetos.FieldByName('ds_class').AsString);
       cdsObjetos.Next;
     end;
-
+    Form2.cloneCDS(cdsObjetos);
     Form2.Showmodal;
 
   Finally
@@ -251,6 +250,7 @@ var
 begin
   meuDBcb := TDBCheckBox.Create(aForm);
   meuDBcb.Name       := aCds.FieldByName('ds_nome').AsString;
+  meuDBcb.Caption    := aCds.FieldByName('ds_caption').AsString;
   meuDBcb.Parent     := buscaPai(aCds, Form2);
   meuDBcb.Left       := acds.FieldByName('left').AsInteger;
   meuDBcb.Top        := acds.FieldByName('top').AsInteger;
@@ -365,8 +365,9 @@ begin
   meuDBGrid.Left     := acds.FieldByName('left').AsInteger;
   meuDBGrid.Top      := acds.FieldByName('top').AsInteger;
   meuDBGrid.Width    := acds.FieldByName('Width').AsInteger;
+//  meuDBGrid.Align    := acds.FieldByName('align').AsInteger;
  // meuDBGrid.Height   := acds.FieldByName('height').AsInteger;
-  meuDBGrid.Align    := alClient;
+  //meuDBGrid.Align    := alClient;
 end;
 
 procedure TForm1.generateSB(aCds: TClientDataSet; aForm: TForm);
@@ -379,8 +380,9 @@ begin
   meuSB.Left     := acds.FieldByName('left').AsInteger;
   meuSB.Top      := acds.FieldByName('top').AsInteger;
   meuSB.Width    := acds.FieldByName('Width').AsInteger;
-  //meuSB.Height   := acds.FieldByName('height').AsInteger;
-  meuSB.Align    := alClient;
+  meuSB.Height   := acds.FieldByName('height').AsInteger;
+  meuSB.Align    := TAlign(GetEnumValue(TypeInfo(TAlign),acds.FieldByName('align').AsString));
+  //showmessage(inttostr(GetEnumValue(TypeInfo(TAlign),acds.FieldByName('align').AsString)));
 end;
 
 procedure TForm1.generateCB(aCds: TClientDataSet; aForm: TForm);
@@ -394,7 +396,7 @@ begin
   meuCB.Top      := acds.FieldByName('top').AsInteger;
   meuCB.Width    := acds.FieldByName('Width').AsInteger;
   //meuCB.Height   := acds.FieldByName('height').AsInteger;
-  meuCB.Align    := alClient;
+  //meuCB.Align    := alClient;
 end;
 
 procedure TForm1.cdsObjetosAfterPost(DataSet: TDataSet);
@@ -427,7 +429,8 @@ begin
   else
     if (aClasse = 'TDBEDIT') or
        (aClasse = 'TADVDBDATETIMEPICKER') or
-       (aClasse = 'TDXDBTOKENEDIT') then
+       (aClasse = 'TDXDBTOKENEDIT') or
+       (aClasse = 'TPHIDBEDIT') then
      generateDBEdit(cdsObjetos, Form2)
   else
     if (aClasse = 'TMEMO') then
@@ -505,6 +508,8 @@ var
   AssignFile(arquivo,dir_base + nmarquivo);
   Reset(arquivo);
 
+  Readln(arquivo, linha);
+
   ordem := 0;
   cdsObjetos.First;
   while not eof (arquivo) do
@@ -529,6 +534,7 @@ var
       cdsObjetos.FieldByName('ds_caption').AsString := script[8];
       cdsObjetos.FieldByName('data_source').AsString  := script[9];
       cdsObjetos.FieldByName('data_field').AsString   := script[10];
+      cdsObjetos.FieldByName('align').AsString      := script[11];
       cdsObjetos.Post;
 
       memoPrincipal.Lines.Add(cdsObjetos.FieldByName('id_order').AsString);
@@ -576,6 +582,7 @@ begin
   cdsObjetos.FieldDefs.Add('data_source',ftString,60);
   cdsObjetos.FieldDefs.Add('data_sourceParent',ftString,60);
   cdsObjetos.FieldDefs.Add('data_field',ftString,60);
+  cdsObjetos.FieldDefs.Add('align',ftString,60);
 
   if FileExists(dir_base + arquivo) then
     cdsObjetos.LoadFromFile(dir_base + arquivo)
