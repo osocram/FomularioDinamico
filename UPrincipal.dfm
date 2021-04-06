@@ -23,10 +23,6 @@ object Form1: TForm1
     Align = alClient
     Caption = 'Log'
     TabOrder = 0
-    ExplicitLeft = 368
-    ExplicitTop = 48
-    ExplicitWidth = 185
-    ExplicitHeight = 105
     object memoPrincipal: TMemo
       Left = 2
       Top = 15
@@ -34,10 +30,6 @@ object Form1: TForm1
       Height = 479
       Align = alClient
       TabOrder = 0
-      ExplicitLeft = -248
-      ExplicitTop = -248
-      ExplicitWidth = 433
-      ExplicitHeight = 353
     end
   end
   object GroupBox2: TGroupBox
@@ -58,9 +50,6 @@ object Form1: TForm1
       Caption = 'Carregar Lista'
       TabOrder = 0
       OnClick = btnListaClick
-      ExplicitLeft = 2
-      ExplicitTop = 15
-      ExplicitHeight = 135
     end
     object DBGrid1: TDBGrid
       Left = 95
@@ -85,9 +74,6 @@ object Form1: TForm1
     Align = alRight
     Caption = 'A'#231#245'es'
     TabOrder = 2
-    ExplicitLeft = 376
-    ExplicitTop = 288
-    ExplicitHeight = 105
     object Button1: TButton
       AlignWithMargins = True
       Left = 5
@@ -96,10 +82,9 @@ object Form1: TForm1
       Height = 50
       Margins.Top = 10
       Align = alTop
-      Caption = 'Adicionar tela de cadastro'
+      Caption = 'Tela de cadastro'
       TabOrder = 0
       OnClick = Button1Click
-      ExplicitTop = 73
     end
     object bCriarForm: TButton
       AlignWithMargins = True
